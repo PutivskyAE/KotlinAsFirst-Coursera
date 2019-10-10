@@ -2,6 +2,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -62,7 +63,12 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String = when {
+    age % 100 in 11..14 -> "$age лет" // 11..14 лет
+    age % 10 == 1 -> "$age год" // 1,21,31..ab год (ab - любое двухзначное число, заканчивающееся на b=1, кроме 11)
+    age % 10 in 2..4 -> "$age года" // 2,22,32..cd года (cd - любое двухзначное число, заканчивающееся на d=2, кроме 12)
+    else -> "$age лет" // все остальные случаи, не вошедшие в вышеупомянутыеy
+}
 
 /**
  * Простая
@@ -73,7 +79,14 @@ fun ageDescription(age: Int): String = TODO()
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = TODO()
+                   t3: Double, v3: Double): Double {
+    val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2 // вычисление половины пути
+    return when {
+    halfWay <= t1 * v1 -> halfWay / v1
+    halfWay <= t1 * v1 + t2 * v2 -> t1 + (halfWay - t1 * v1) / v2
+    else -> t1 + t2 + (halfWay - t1 * v1 - t2 * v2) / v3
+    }
+}
 
 /**
  * Простая
@@ -86,7 +99,12 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = TODO()
+                       rookX2: Int, rookY2: Int): Int {
+    return if ((kingX == rookX1 || kingX == rookX2) && (kingY == rookY1 || kingY ==rookY2)) 3 // угроза королю от обеих ладей
+    else if (kingX == rookX1 || kingY == rookY1) 1 // угроза королю от первой ладьи
+    else if (kingX == rookX2 || kingY == rookY2) 2 // угроза королю от второй ладьи
+    else 0 // угрозы королю нет
+}
 
 /**
  * Простая
@@ -100,7 +118,12 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = TODO()
+                          bishopX: Int, bishopY: Int): Int {
+    return if ((kingX == rookX || kingY == rookY) && (((kingX - kingY) == (bishopX - bishopY)) || ((kingX + kingY) == (bishopX + bishopY)))) 3 // угроза королю от ладьи и слона
+    else if (kingX == rookX || kingY == rookY) 1 // угроза королю от ладьи
+    else if (((kingX - kingY) == (bishopX - bishopY)) || ((kingX + kingY) == (bishopX + bishopY))) 2 // угроза королю от слона
+    else 0 // угрозы королю нет
+}
 
 /**
  * Простая
@@ -110,7 +133,18 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    return if ((a > b + c) || (b > a + c) || (c > b + a)) -1 // треугольника не существует
+    else if ((a > b && a > c) && (a * a < b * b + c * c)) 0  // наибольшая сторона a, треугольник остроугольный
+    else if (a * a > b * b + c * c) 2                        // наибольшая сторона a, треугольник тупоугольный
+    else if (a * a == b * b + c * c) 1                       // наибольшая сторона a, треугольник прямоугольный
+    else if ((b > a && b > c) && (b * b < a * a + c * c)) 0  // наибольшая сторона b, треугольник остроугольный
+    else if (b * b > a * a + c * c) 2                        // наибольшая сторона b, треугольник тупоугольный
+    else if (b * b == a * a + c * c) 1                       // наибольшая сторона b, треугольник прямоугольный
+    else if ((c > a && b > a) && (c * c < a * a + b * b)) 0  // наибольшая сторона c, треугольник остроугольный
+    else if (c * c > a * a + b * b) 2                        // наибольшая сторона c, треугольник тупоугольный
+    else 1                                                   // наибольшая сторона c, треугольник прямоугольный
+}
 
 /**
  * Средняя
@@ -120,4 +154,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    (a > d || b < c) -> -1
+    (a <= d && d <= b && a <= c) -> d - c
+    (c <= b && b <= d && a < c) -> b - c
+    (c <= a && b <= d) -> b - a
+    else -> d - a
+}
