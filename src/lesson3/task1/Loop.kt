@@ -74,7 +74,19 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    if (n == 1) return 1
+    if (n == 2) return 1
+    var a1 = 1
+    var a2 = 1
+    var temp: Int
+    for (i in 3..n) {
+        temp = a2
+        a2 = a1 + a2
+        a1 = temp
+    }
+    return a2
+}
 
 /**
  * Простая
@@ -191,7 +203,19 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var numbers = 1
+    var str = ""
+    var nn = n
+    while (nn > 0) {
+        val sqrnumb = numbers * numbers
+        str = "$sqrnumb"
+        numbers++
+        nn -= str.length
+    }
+    numbers = str.length - 1 + nn
+    return str[numbers].toString().toInt()
+}
 
 /**
  * Сложная
@@ -202,4 +226,16 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var numbers = 1
+    var str = ""
+    var nn = n
+    while (nn > 0) {
+        val fibnumb = fib(numbers)
+        str = "$fibnumb"
+        numbers++
+        nn -= str.length
+    }
+    numbers = str.length - 1 + nn
+    return str[numbers].toString().toInt()
+}
